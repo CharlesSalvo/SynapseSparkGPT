@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e90b643c-9579-4679-bc12-e29a19d0d1f1"
+				"spark.autotune.trackingId": "44317372-23f3-48fc-a5e3-84ea7a4b9816"
 			}
 		},
 		"metadata": {
@@ -64,7 +64,7 @@
 				"source": [
 					"%run PromptFunction_Relational"
 				],
-				"execution_count": 6
+				"execution_count": 11
 			},
 			{
 				"cell_type": "code",
@@ -92,13 +92,13 @@
 					"NrOfAccounts =  100 # Set number of accounts\n",
 					""
 				],
-				"execution_count": 7
+				"execution_count": 12
 			},
 			{
 				"cell_type": "code",
 				"metadata": {
 					"jupyter": {
-						"outputs_hidden": true,
+						"outputs_hidden": false,
 						"source_hidden": false
 					},
 					"nteract": {
@@ -116,7 +116,7 @@
 					"display(dfcustomerids)\n",
 					""
 				],
-				"execution_count": 8
+				"execution_count": 13
 			},
 			{
 				"cell_type": "code",
@@ -140,7 +140,7 @@
 					"display(dfaccountids)\n",
 					""
 				],
-				"execution_count": 10
+				"execution_count": 14
 			},
 			{
 				"cell_type": "code",
