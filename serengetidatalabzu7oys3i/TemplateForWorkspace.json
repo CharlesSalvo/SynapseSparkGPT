@@ -26,6 +26,15 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('workspaceName'), '/ApacheSpark')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AzureKeyVault')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -111,6 +120,313 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/GenerateData_Relational')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "ApacheSpark",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "733c58a0-f172-40b9-b1ae-a1b674f61ea9"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/2aa92634-96f9-45f8-a0aa-a3789b73ce2d/resourceGroups/rgp-salvo-sbx/providers/Microsoft.Synapse/workspaces/serengetidatalabzu7oys3i/bigDataPools/ApacheSpark",
+						"name": "ApacheSpark",
+						"type": "Spark",
+						"endpoint": "https://serengetidatalabzu7oys3i.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ApacheSpark",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.2",
+						"nodeCount": 10,
+						"cores": 8,
+						"memory": 56,
+						"automaticScaleJobs": false
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": false,
+								"source_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"%run PromptFunction_Relational"
+						],
+						"outputs": [],
+						"execution_count": 7
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": false,
+								"source_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"from synapse.ml.core.platform import find_secret\n",
+							"\n",
+							"# Fill in the following lines with your service information\n",
+							"service_name = \"https://echostorai.openai.azure.com/\" # Name of your OpenAI service\n",
+							"deployment_name = \"text-davinci-003\" # Name of your deployment in OpenAI\n",
+							"key = \"4d263a830b0d499b9096258cd2124a65\"  # replace this with your secret and keyvault\n",
+							"\n",
+							"# Note: a cartesian product of customers and restaurants will be generated\n",
+							"NrOfCustomers = 5 # Set number of Customers\n",
+							"NrOfRestaurants = 5 # Set number of Restaurants\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 2
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": false,
+								"source_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"dfcustomerids = df1 = spark.range(1,NrOfCustomers + 1) \\\n",
+							"    .withColumnRenamed(\"id\", \"customerid\") \\\n",
+							"    .withColumn(\"prompt\", customer_prompt_udf())\n",
+							"\n",
+							"display(dfcustomerids)\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 3
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": false,
+								"source_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"dfrestaurantids = df1 = spark.range(1,NrOfRestaurants + 1) \\\n",
+							"    .withColumnRenamed(\"id\", \"restaurantid\") \\\n",
+							"    .withColumn(\"prompt\", restaurant_prompt_udf())\n",
+							"\n",
+							"display(dfrestaurantids)\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": false,
+								"source_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"from synapse.ml.cognitive import OpenAICompletion\n",
+							"\n",
+							"OpenAICompletion = (\n",
+							"    OpenAICompletion()\n",
+							"    .setSubscriptionKey(key)\n",
+							"    .setDeploymentName(deployment_name)\n",
+							"    .setUrl(\"https://{}.openai.azure.com/\".format(service_name))\n",
+							"    .setMaxTokens(2048)\n",
+							"    .setPromptCol(\"prompt\")\n",
+							"    .setErrorCol(\"error\")\n",
+							"    .setOutputCol(\"response\")\n",
+							")"
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": false,
+								"source_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"from pyspark.sql.functions import col\n",
+							"\n",
+							"df_customerobject = OpenAICompletion.transform(dfcustomerids) \\\n",
+							"    .select(col('customerid'), col('response.choices.text').getItem(0).alias('customerobject'))\\\n",
+							"    .cache()\n",
+							"\n",
+							"df_restaurantobject = OpenAICompletion.transform(dfrestaurantids) \\\n",
+							"    .select(col('restaurantid'), col('response.choices.text').getItem(0).alias('restaurantobject'))\\\n",
+							"    .cache()\n",
+							"\n",
+							"display(df_customerobject)\n",
+							"display(df_restaurantobject)\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": false,
+								"source_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"from pyspark.sql.types import StructType, StructField, StringType, DoubleType\n",
+							"from pyspark.sql.functions import col, from_json\n",
+							"\n",
+							"schemaCustomer = StructType([ \\\n",
+							"        StructField(\"firstname\", StringType(), False), \\\n",
+							"        StructField(\"lastname\", StringType(), False), \\\n",
+							"        StructField(\"username\", StringType(), False), \\\n",
+							"        StructField(\"email\", StringType(), False) \\\n",
+							"        ])\n",
+							"\n",
+							"schemaRestaurant = StructType([ \\\n",
+							"        StructField(\"restaurant\", StringType(), False), \\\n",
+							"        StructField(\"description\", StringType(), False) \\\n",
+							"        ])\n",
+							"\n",
+							"\n",
+							"\n",
+							"df_customer = df_customerobject.withColumn(\"json\",from_json(col(\"customerobject\"), schemaCustomer))\\\n",
+							"    .select(col(\"customerID\"), col(\"json.*\"))\n",
+							"\n",
+							"df_restaurant = df_restaurantobject.withColumn(\"json\",from_json(col(\"restaurantobject\"), schemaRestaurant))\\\n",
+							"    .select(col(\"restaurantID\"), col(\"json.*\"))\n",
+							"\n",
+							"\n",
+							"\n",
+							"\n",
+							"display(df_customer)\n",
+							"display(df_restaurant)\n",
+							"\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": null
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": false,
+								"source_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"from pyspark.sql.functions import col, row_number, window, rand\n",
+							"from pyspark.sql.types import StructType, StructField, StringType, IntegerType\n",
+							"\n",
+							"\n",
+							"cross_joined_df = df_customer.crossJoin(df_restaurant) \\\n",
+							"    .withColumn(\"prompt\", reviews_prompt_udf(col(\"restaurant\"), ((5 * rand()).cast(\"int\") + 1))) \\\n",
+							"\n",
+							"df_reviewobject = OpenAICompletion.transform(cross_joined_df) \\\n",
+							"    .withColumn(\"reviewObject\",col('response.choices.text').getItem(0))\\\n",
+							"    .select(col(\"customerid\"),col(\"restaurantid\"), col(\"reviewobject\")) \n",
+							"\n",
+							"\n",
+							"schemaReview = StructType([ \\\n",
+							"        StructField(\"reviewdate\", StringType(), False), \\\n",
+							"        StructField(\"review\", StringType(), False), \\\n",
+							"        StructField(\"rating\", IntegerType(), False) \\\n",
+							"        ])\n",
+							"\n",
+							"\n",
+							"df_review = df_reviewobject.withColumn(\"json\",from_json(col(\"reviewobject\"), schemaReview))\\\n",
+							"    .select(col(\"restaurantid\"), col(\"customerid\"), col(\"json.*\"))\n",
+							"\n",
+							"display(df_review)"
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Notebook 1')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
@@ -123,6 +439,7 @@
 					"executorMemory": "28g",
 					"executorCores": 4,
 					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": false,
 					"conf": {
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
@@ -159,8 +476,7 @@
 						"source": [
 							""
 						],
-						"outputs": [],
-						"execution_count": null
+						"outputs": []
 					},
 					{
 						"cell_type": "markdown",
@@ -178,6 +494,166 @@
 				]
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/PromptFunction_Relational')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "ApacheSpark",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "56g",
+					"driverCores": 8,
+					"executorMemory": "56g",
+					"executorCores": 8,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "dedef606-bcfb-4909-8813-bf8ff47ff1bd"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/2aa92634-96f9-45f8-a0aa-a3789b73ce2d/resourceGroups/rgp-salvo-sbx/providers/Microsoft.Synapse/workspaces/serengetidatalabzu7oys3i/bigDataPools/ApacheSpark",
+						"name": "ApacheSpark",
+						"type": "Spark",
+						"endpoint": "https://serengetidatalabzu7oys3i.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ApacheSpark",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net"
+						},
+						"sparkVersion": "3.2",
+						"nodeCount": 10,
+						"cores": 8,
+						"memory": 56
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": false,
+								"source_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"print(\"Create UDFs 'tbl_prompt()) -> str'\")"
+						],
+						"outputs": [],
+						"execution_count": 1
+					},
+					{
+						"cell_type": "code",
+						"source": [
+							"from pyspark.sql.functions import udf\n",
+							"from pyspark.sql.types import StringType, IntegerType\n",
+							"\n",
+							"@udf(returnType=StringType())\n",
+							"def customer_prompt_udf():\n",
+							"    return \"Generate a json containing international customer information. Use the following json structure: \\\n",
+							"{ \\\n",
+							"        \\\"firstname\\\": \\\"\\\", \\\n",
+							"        \\\"lastname\\\": \\\"\\\", \\\n",
+							"        \\\"username\\\": \\\"\\\", \\\n",
+							"        \\\"email\\\": \\\"\\\" \\\n",
+							"}\"\n",
+							"\n",
+							"@udf(returnType=StringType())\n",
+							"def restaurant_prompt_udf():\n",
+							"    return \"Generate a json containing restaurant infromation. Use the following json structure:: \\\n",
+							"{ \\\n",
+							"        \\\"restaurant\\\": \\\"\\\", \\\n",
+							"        \\\"description\\\": \\\"\\\" \\\n",
+							"}\"\n",
+							"\n",
+							"\n",
+							"@udf(returnType=StringType())\n",
+							"def reviews_prompt_udf(restaurant: str, rating: int) -> str:    \n",
+							"    return \"Write 1 review for about restaurant \"+restaurant+\" with a rating of \"+str(rating)+\" on a scale to 5 : reviewdate, review, rating. \\\n",
+							"Use the following json structure: \\\n",
+							"{ \\\n",
+							"    \\\"reviewdate\\\": \\\"yyyymmdd\\\", \\\n",
+							"    \\\"review\\\": \\\"This contains the review\\\", \\\n",
+							"    \\\"rating\\\": 5\\\n",
+							"} \\\n",
+							"json:\\\n",
+							"\"\n",
+							"\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 2
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"outputs_hidden": false,
+								"source_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"print(\"UDFs created\")"
+						],
+						"outputs": [],
+						"execution_count": 3
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ApacheSpark')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"autoPause": {
+					"enabled": true,
+					"delayInMinutes": 15
+				},
+				"autoScale": {
+					"enabled": true,
+					"maxNodeCount": 10,
+					"minNodeCount": 3
+				},
+				"nodeCount": 10,
+				"nodeSize": "Medium",
+				"nodeSizeFamily": "MemoryOptimized",
+				"sparkVersion": "3.2",
+				"isComputeIsolationEnabled": false,
+				"sessionLevelPackagesEnabled": false,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "eastus"
 		}
 	]
 }
