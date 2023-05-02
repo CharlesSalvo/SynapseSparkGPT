@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"value": "serengetidatalabzu7oys3i"
+		},
+		"serengetidatalabzu7oys3i-WorkspaceDefaultSqlServer_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:serengetidatalabzu7oys3i.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"AzureKeyVault_properties_typeProperties_baseUrl": {
+			"value": "https://serengetikeyvaultzu7oys3.vault.azure.net/"
+		},
+		"serengetidatalabzu7oys3i-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"value": "https://serengetistorezu7oys3io6.dfs.core.windows.net/"
+		}
+	}
+}
