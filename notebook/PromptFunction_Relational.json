@@ -1,0 +1,130 @@
+{
+	"name": "PromptFunction_Relational",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "ApacheSpark",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "ef67e699-d23a-4554-9188-2ffbf57e2a2e"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/2aa92634-96f9-45f8-a0aa-a3789b73ce2d/resourceGroups/rgp-salvo-sbx/providers/Microsoft.Synapse/workspaces/serengetidatalabzu7oys3i/bigDataPools/ApacheSpark",
+				"name": "ApacheSpark",
+				"type": "Spark",
+				"endpoint": "https://serengetidatalabzu7oys3i.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/ApacheSpark",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.2",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"outputs_hidden": false,
+						"source_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"print(\"Create UDFs 'tbl_prompt()) -> str'\")"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"from pyspark.sql.functions import udf\n",
+					"from pyspark.sql.types import StringType, IntegerType\n",
+					"\n",
+					"@udf(returnType=StringType())\n",
+					"def customer_prompt_udf():\n",
+					"    return \"Generate a json containing international customer information. Use the following json structure: \\\n",
+					"{ \\\n",
+					"        \\\"firstname\\\": \\\"\\\", \\\n",
+					"        \\\"lastname\\\": \\\"\\\", \\\n",
+					"        \\\"username\\\": \\\"\\\", \\\n",
+					"        \\\"email\\\": \\\"\\\" \\\n",
+					"}\"\n",
+					"\n",
+					"@udf(returnType=StringType())\n",
+					"def restaurant_prompt_udf():\n",
+					"    return \"Generate a json containing restaurant infromation. Use the following json structure:: \\\n",
+					"{ \\\n",
+					"        \\\"restaurant\\\": \\\"\\\", \\\n",
+					"        \\\"description\\\": \\\"\\\" \\\n",
+					"}\"\n",
+					"\n",
+					"\n",
+					"@udf(returnType=StringType())\n",
+					"def reviews_prompt_udf(restaurant: str, rating: int) -> str:    \n",
+					"    return \"Write 1 review for about restaurant \"+restaurant+\" with a rating of \"+str(rating)+\" on a scale to 5 : reviewdate, review, rating. \\\n",
+					"Use the following json structure: \\\n",
+					"{ \\\n",
+					"    \\\"reviewdate\\\": \\\"yyyymmdd\\\", \\\n",
+					"    \\\"review\\\": \\\"This contains the review\\\", \\\n",
+					"    \\\"rating\\\": 5\\\n",
+					"} \\\n",
+					"json:\\\n",
+					"\"\n",
+					"\n",
+					""
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"outputs_hidden": false,
+						"source_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"print(\"UDFs created\")"
+				],
+				"execution_count": 3
+			}
+		]
+	}
+}
