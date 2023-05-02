@@ -17,7 +17,9 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
+
 				"spark.autotune.trackingId": "a2c314f8-ae0c-4d0d-8642-cdf4df6e221b"
+
 			}
 		},
 		"metadata": {
@@ -64,7 +66,7 @@
 				"source": [
 					"%run PromptFunction_Relational"
 				],
-				"execution_count": 7
+				"execution_count": 6
 			},
 			{
 				"cell_type": "code",
@@ -88,17 +90,17 @@
 					"key = \"4d263a830b0d499b9096258cd2124a65\"  # replace this with your secret and keyvault\n",
 					"\n",
 					"# Note: a cartesian product of customers and restaurants will be generated\n",
-					"NrOfCustomers = 5 # Set number of Customers\n",
-					"NrOfRestaurants = 5 # Set number of Restaurants\n",
+					"NrOfCustomers = 100 # Set number of Customers\n",
+					"NrOfAccounts =  100 # Set number of accounts\n",
 					""
 				],
-				"execution_count": 2
+				"execution_count": 7
 			},
 			{
 				"cell_type": "code",
 				"metadata": {
 					"jupyter": {
-						"outputs_hidden": false,
+						"outputs_hidden": true,
 						"source_hidden": false
 					},
 					"nteract": {
@@ -116,7 +118,7 @@
 					"display(dfcustomerids)\n",
 					""
 				],
-				"execution_count": 3
+				"execution_count": 8
 			},
 			{
 				"cell_type": "code",
@@ -133,14 +135,14 @@
 					"collapsed": false
 				},
 				"source": [
-					"dfrestaurantids = df1 = spark.range(1,NrOfRestaurants + 1) \\\n",
-					"    .withColumnRenamed(\"id\", \"restaurantid\") \\\n",
-					"    .withColumn(\"prompt\", restaurant_prompt_udf())\n",
+					"dfaccountids = df1 = spark.range(1,NrOfAccounts + 1) \\\n",
+					"    .withColumnRenamed(\"id\", \"accountid\") \\\n",
+					"    .withColumn(\"prompt\", account_prompt_udf())\n",
 					"\n",
-					"display(dfrestaurantids)\n",
+					"display(dfaccountids)\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 10
 			},
 			{
 				"cell_type": "code",
