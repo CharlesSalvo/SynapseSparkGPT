@@ -26,15 +26,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('workspaceName'), '/ApacheSpark')]",
-			"type": "Microsoft.Synapse/workspaces/bigDataPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/AzureKeyVault')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -140,7 +131,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "733c58a0-f172-40b9-b1ae-a1b674f61ea9"
+						"spark.autotune.trackingId": "d4dacd15-8121-4b3c-8d54-0336aa0725c1"
 					}
 				},
 				"metadata": {
@@ -188,7 +179,7 @@
 							"%run PromptFunction_Relational"
 						],
 						"outputs": [],
-						"execution_count": 7
+						"execution_count": 6
 					},
 					{
 						"cell_type": "code",
@@ -212,18 +203,18 @@
 							"key = \"4d263a830b0d499b9096258cd2124a65\"  # replace this with your secret and keyvault\n",
 							"\n",
 							"# Note: a cartesian product of customers and restaurants will be generated\n",
-							"NrOfCustomers = 5 # Set number of Customers\n",
-							"NrOfRestaurants = 5 # Set number of Restaurants\n",
+							"NrOfCustomers = 100 # Set number of Customers\n",
+							"NrOfAccounts =  100 # Set number of accounts\n",
 							""
 						],
 						"outputs": [],
-						"execution_count": 2
+						"execution_count": 7
 					},
 					{
 						"cell_type": "code",
 						"metadata": {
 							"jupyter": {
-								"outputs_hidden": false,
+								"outputs_hidden": true,
 								"source_hidden": false
 							},
 							"nteract": {
@@ -242,7 +233,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": 8
 					},
 					{
 						"cell_type": "code",
@@ -259,15 +250,15 @@
 							"collapsed": false
 						},
 						"source": [
-							"dfrestaurantids = df1 = spark.range(1,NrOfRestaurants + 1) \\\n",
-							"    .withColumnRenamed(\"id\", \"restaurantid\") \\\n",
-							"    .withColumn(\"prompt\", restaurant_prompt_udf())\n",
+							"dfaccountids = df1 = spark.range(1,NrOfAccounts + 1) \\\n",
+							"    .withColumnRenamed(\"id\", \"accountid\") \\\n",
+							"    .withColumn(\"prompt\", account_prompt_udf())\n",
 							"\n",
-							"display(dfrestaurantids)\n",
+							"display(dfaccountids)\n",
 							""
 						],
 						"outputs": [],
-						"execution_count": null
+						"execution_count": 10
 					},
 					{
 						"cell_type": "code",
@@ -573,31 +564,33 @@
 							"\n",
 							"@udf(returnType=StringType())\n",
 							"def customer_prompt_udf():\n",
-							"    return \"Generate a json containing international customer information. Use the following json structure: \\\n",
+							"    return \"Generate a json containing banking customer information. Use the following json structure: \\\n",
 							"{ \\\n",
 							"        \\\"firstname\\\": \\\"\\\", \\\n",
 							"        \\\"lastname\\\": \\\"\\\", \\\n",
-							"        \\\"username\\\": \\\"\\\", \\\n",
-							"        \\\"email\\\": \\\"\\\" \\\n",
+							"        \\\"accountid\\\": \\\"\\\", \\\n",
+							"        \\\"city\\\": \\\"\\\", \\\n",
+							"        \\\"state\\\": \\\"\\\", \\\n",
+							"        \\\"zipcode\\\": \\\"\\\" \\\n",
 							"}\"\n",
 							"\n",
 							"@udf(returnType=StringType())\n",
-							"def restaurant_prompt_udf():\n",
-							"    return \"Generate a json containing restaurant infromation. Use the following json structure:: \\\n",
+							"def account_prompt_udf():\n",
+							"    return \"Generate a json containing banking account infromation. Use the following json structure:: \\\n",
 							"{ \\\n",
-							"        \\\"restaurant\\\": \\\"\\\", \\\n",
-							"        \\\"description\\\": \\\"\\\" \\\n",
+							"        \\\"accountid\\\": \\\"\\\", \\\n",
+							"        \\\"balance\\\": \\\"\\\" \\\n",
 							"}\"\n",
 							"\n",
 							"\n",
 							"@udf(returnType=StringType())\n",
-							"def reviews_prompt_udf(restaurant: str, rating: int) -> str:    \n",
+							"def transaction_prompt_udf(restaurant: str, rating: int) -> str:    \n",
 							"    return \"Write 1 review for about restaurant \"+restaurant+\" with a rating of \"+str(rating)+\" on a scale to 5 : reviewdate, review, rating. \\\n",
 							"Use the following json structure: \\\n",
 							"{ \\\n",
-							"    \\\"reviewdate\\\": \\\"yyyymmdd\\\", \\\n",
-							"    \\\"review\\\": \\\"This contains the review\\\", \\\n",
-							"    \\\"rating\\\": 5\\\n",
+							"    \\\"transaction date\\\": \\\"yyyymmdd\\\", \\\n",
+							"    \\\"amount\\\": \\\"This contains the review\\\" \\\n",
+							"\n",
 							"} \\\n",
 							"json:\\\n",
 							"\"\n",
