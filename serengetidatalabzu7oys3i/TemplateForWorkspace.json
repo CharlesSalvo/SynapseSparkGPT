@@ -131,7 +131,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "2d2ea30e-7d7e-46f0-9df2-4a8611ee6154"
+						"spark.autotune.trackingId": "bd4324ca-a367-41c5-bc86-cded23549816"
 					}
 				},
 				"metadata": {
@@ -178,7 +178,7 @@
 							"%run PromptFunction_Relational"
 						],
 						"outputs": [],
-						"execution_count": 9
+						"execution_count": 14
 					},
 					{
 						"cell_type": "code",
@@ -439,7 +439,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "3daa4f38-5fe4-4e20-99b9-a939989ba9b1"
+						"spark.autotune.trackingId": "1b51e0a3-ee26-4084-a34f-0f017f41ab19"
 					}
 				},
 				"metadata": {
@@ -487,7 +487,7 @@
 							"print(\"Create UDFs 'tbl_prompt()) -> str'\")"
 						],
 						"outputs": [],
-						"execution_count": 1
+						"execution_count": 15
 					},
 					{
 						"cell_type": "code",
@@ -512,7 +512,7 @@
 							"def account_prompt_udf(accountid: str):\n",
 							"    return \"Generate a json containing banking account infromation. Use the following json structure:: \\\n",
 							"{ \\\n",
-							"        \\\"accountid\\\":\" + accountid + \"\", \\\n",
+							"        \\\"accountid\\\": \\\" + accountid + \\\", \\\n",
 							"        \\\"balance\\\": \\\"\\\" \\\n",
 							"}\"\n",
 							"\n",
@@ -530,7 +530,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 2
+						"execution_count": 16
 					},
 					{
 						"cell_type": "code",
@@ -549,7 +549,7 @@
 							"print(\"UDFs created\")"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": 17
 					}
 				]
 			},
