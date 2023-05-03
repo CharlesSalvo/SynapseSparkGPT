@@ -131,7 +131,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "aac29d7a-12ed-4a5c-a491-e396d5c58d1c"
+						"spark.autotune.trackingId": "2d2ea30e-7d7e-46f0-9df2-4a8611ee6154"
 					}
 				},
 				"metadata": {
@@ -156,8 +156,7 @@
 						"sparkVersion": "3.2",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -179,7 +178,7 @@
 							"%run PromptFunction_Relational"
 						],
 						"outputs": [],
-						"execution_count": 28
+						"execution_count": 9
 					},
 					{
 						"cell_type": "code",
@@ -208,7 +207,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 29
+						"execution_count": 3
 					},
 					{
 						"cell_type": "code",
@@ -225,7 +224,7 @@
 							"collapsed": false
 						},
 						"source": [
-							"dfcustomerids = df1 = spark.range(1,NrOfCustomers + 1) \\\n",
+							"dfcustomerids = spark.range(1,NrOfCustomers + 1) \\\n",
 							"    .withColumnRenamed(\"id\", \"customerid\") \\\n",
 							"    .withColumn(\"prompt\", customer_prompt_udf())\n",
 							"\n",
@@ -233,7 +232,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 30
+						"execution_count": 10
 					},
 					{
 						"cell_type": "code",
@@ -250,7 +249,7 @@
 							"collapsed": false
 						},
 						"source": [
-							"dfaccountids = df1 = spark.range(1,NrOfAccounts + 1) \\\n",
+							"dfaccountids = spark.range(1,NrOfAccounts + 1) \\\n",
 							"    .withColumnRenamed(\"id\", \"accountid\") \\\n",
 							"    .withColumn(\"prompt\", account_prompt_udf())\n",
 							"\n",
@@ -258,7 +257,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 31
+						"execution_count": 11
 					},
 					{
 						"cell_type": "code",
@@ -288,7 +287,7 @@
 							")"
 						],
 						"outputs": [],
-						"execution_count": 32
+						"execution_count": 7
 					},
 					{
 						"cell_type": "code",
@@ -320,7 +319,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 33
+						"execution_count": 8
 					},
 					{
 						"cell_type": "code",
@@ -420,75 +419,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/Notebook 1')]",
-			"type": "Microsoft.Synapse/workspaces/notebooks",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"nbformat": 4,
-				"nbformat_minor": 2,
-				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
-					"numExecutors": 2,
-					"runAsWorkspaceSystemIdentity": false,
-					"conf": {
-						"spark.dynamicAllocation.enabled": "false",
-						"spark.dynamicAllocation.minExecutors": "2",
-						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "75e4b46c-9300-44d9-b593-6f5b654a29a0"
-					}
-				},
-				"metadata": {
-					"saveOutput": true,
-					"enableDebugMode": false,
-					"kernelspec": {
-						"name": "synapse_pyspark",
-						"display_name": "python"
-					},
-					"language_info": {
-						"name": "python"
-					},
-					"sessionKeepAliveTimeout": 30
-				},
-				"cells": [
-					{
-						"cell_type": "code",
-						"metadata": {
-							"jupyter": {
-								"source_hidden": false,
-								"outputs_hidden": false
-							},
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							""
-						],
-						"outputs": []
-					},
-					{
-						"cell_type": "markdown",
-						"metadata": {
-							"nteract": {
-								"transient": {
-									"deleting": false
-								}
-							}
-						},
-						"source": [
-							""
-						]
-					}
-				]
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/PromptFunction_Relational')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
@@ -509,7 +439,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "6799e129-c32b-48bb-b291-6af5f743ca16"
+						"spark.autotune.trackingId": "3daa4f38-5fe4-4e20-99b9-a939989ba9b1"
 					}
 				},
 				"metadata": {
@@ -557,7 +487,7 @@
 							"print(\"Create UDFs 'tbl_prompt()) -> str'\")"
 						],
 						"outputs": [],
-						"execution_count": 20
+						"execution_count": 1
 					},
 					{
 						"cell_type": "code",
@@ -579,10 +509,10 @@
 							"}\"\n",
 							"\n",
 							"@udf(returnType=StringType())\n",
-							"def account_prompt_udf():\n",
+							"def account_prompt_udf(accountid: str):\n",
 							"    return \"Generate a json containing banking account infromation. Use the following json structure:: \\\n",
 							"{ \\\n",
-							"        \\\"accountid\\\": \\\"\\\", \\\n",
+							"        \\\"accountid\\\":\" + accountid + \"\", \\\n",
 							"        \\\"balance\\\": \\\"\\\" \\\n",
 							"}\"\n",
 							"\n",
@@ -600,7 +530,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 21
+						"execution_count": 2
 					},
 					{
 						"cell_type": "code",
@@ -619,7 +549,7 @@
 							"print(\"UDFs created\")"
 						],
 						"outputs": [],
-						"execution_count": 22
+						"execution_count": 3
 					}
 				]
 			},
