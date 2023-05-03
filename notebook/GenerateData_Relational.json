@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "bd4324ca-a367-41c5-bc86-cded23549816"
+				"spark.autotune.trackingId": "9683d9f2-a7b0-4dc1-b5fa-802a1661e18e"
 			}
 		},
 		"metadata": {
@@ -88,8 +88,8 @@
 					"key = \"4d263a830b0d499b9096258cd2124a65\"  # replace this with your secret and keyvault\n",
 					"\n",
 					"# Note: a cartesian product of customers and restaurants will be generated\n",
-					"NrOfCustomers = 100 # Set number of Customers\n",
-					"NrOfAccounts =  100 # Set number of accounts\n",
+					"NrOfCustomers = 10 # Set number of Customers\n",
+					"NrOfAccounts =  10 # Set number of accounts\n",
 					""
 				],
 				"execution_count": 3
