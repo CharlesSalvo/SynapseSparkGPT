@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "e84ca89a-8a20-44c4-affc-5fb8acfe0386"
+				"spark.autotune.trackingId": "2d2ea30e-7d7e-46f0-9df2-4a8611ee6154"
 			}
 		},
 		"metadata": {
@@ -64,7 +64,7 @@
 				"source": [
 					"%run PromptFunction_Relational"
 				],
-				"execution_count": 28
+				"execution_count": 9
 			},
 			{
 				"cell_type": "code",
@@ -92,7 +92,7 @@
 					"NrOfAccounts =  100 # Set number of accounts\n",
 					""
 				],
-				"execution_count": 29
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -109,14 +109,14 @@
 					"collapsed": false
 				},
 				"source": [
-					"dfcustomerids = df1 = spark.range(1,NrOfCustomers + 1) \\\n",
+					"dfcustomerids = spark.range(1,NrOfCustomers + 1) \\\n",
 					"    .withColumnRenamed(\"id\", \"customerid\") \\\n",
 					"    .withColumn(\"prompt\", customer_prompt_udf())\n",
 					"\n",
 					"display(dfcustomerids)\n",
 					""
 				],
-				"execution_count": 30
+				"execution_count": 10
 			},
 			{
 				"cell_type": "code",
@@ -133,14 +133,14 @@
 					"collapsed": false
 				},
 				"source": [
-					"dfaccountids = df1 = spark.range(1,NrOfAccounts + 1) \\\n",
+					"dfaccountids = spark.range(1,NrOfAccounts + 1) \\\n",
 					"    .withColumnRenamed(\"id\", \"accountid\") \\\n",
 					"    .withColumn(\"prompt\", account_prompt_udf())\n",
 					"\n",
 					"display(dfaccountids)\n",
 					""
 				],
-				"execution_count": 31
+				"execution_count": 11
 			},
 			{
 				"cell_type": "code",
@@ -169,7 +169,7 @@
 					"    .setOutputCol(\"response\")\n",
 					")"
 				],
-				"execution_count": 32
+				"execution_count": 7
 			},
 			{
 				"cell_type": "code",
@@ -200,7 +200,7 @@
 					"display(df_accountobject)\n",
 					""
 				],
-				"execution_count": 33
+				"execution_count": 8
 			},
 			{
 				"cell_type": "code",
