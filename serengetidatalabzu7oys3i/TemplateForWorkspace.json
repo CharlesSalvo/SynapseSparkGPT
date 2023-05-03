@@ -131,7 +131,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "b48df17f-5ce9-4756-afe2-6653f004861b"
+						"spark.autotune.trackingId": "44317372-23f3-48fc-a5e3-84ea7a4b9816"
 					}
 				},
 				"metadata": {
@@ -156,8 +156,7 @@
 						"sparkVersion": "3.2",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
+						"memory": 56
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -507,7 +506,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "5f38a8af-63b9-4bf0-9c37-607177bf1eab"
+						"spark.autotune.trackingId": "478e6312-6f3d-4baa-8d9b-61b19b96dfeb"
 					}
 				},
 				"metadata": {
@@ -555,7 +554,7 @@
 							"print(\"Create UDFs 'tbl_prompt()) -> str'\")"
 						],
 						"outputs": [],
-						"execution_count": 1
+						"execution_count": 20
 					},
 					{
 						"cell_type": "code",
@@ -584,23 +583,20 @@
 							"        \\\"balance\\\": \\\"\\\" \\\n",
 							"}\"\n",
 							"\n",
-							"\n",
 							"@udf(returnType=StringType())\n",
-							"def transaction_prompt_udf(restaurant: str, rating: int) -> str:    \n",
-							"    return \"Write 1 review for about restaurant \"+restaurant+\" with a rating of \"+str(rating)+\" on a scale to 5 : reviewdate, review, rating. \\\n",
-							"Use the following json structure: \\\n",
+							"def transaction_prompt_udf(accountid: str) -> str:    \n",
+							"    return \"Create a json containing a bank transaction for accountid \"+ accountid + \" Use the following json structure: \\\n",
 							"{ \\\n",
-							"    \\\"transaction date\\\": \\\"yyyymmdd\\\", \\\n",
-							"    \\\"amount\\\": \\\"This contains the review\\\" \\\n",
+							"    \\\"transaction date\\\": \\\"yyyy-mm-dd\\\", \\\n",
+							"    \\\"amount\\\": \\\"\\\" \\\n",
+							"} \"\n",
 							"\n",
-							"} \\\n",
-							"json:\\\n",
-							"\"\n",
+							"\n",
 							"\n",
 							""
 						],
 						"outputs": [],
-						"execution_count": 2
+						"execution_count": 21
 					},
 					{
 						"cell_type": "code",
@@ -619,7 +615,7 @@
 							"print(\"UDFs created\")"
 						],
 						"outputs": [],
-						"execution_count": 3
+						"execution_count": 22
 					}
 				]
 			},
