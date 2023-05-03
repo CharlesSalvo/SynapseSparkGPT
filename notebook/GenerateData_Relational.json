@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "2df310db-4cdf-45e9-8ffe-b24a257dcca4"
+				"spark.autotune.trackingId": "e84ca89a-8a20-44c4-affc-5fb8acfe0386"
 			}
 		},
 		"metadata": {
@@ -64,7 +64,7 @@
 				"source": [
 					"%run PromptFunction_Relational"
 				],
-				"execution_count": 15
+				"execution_count": 28
 			},
 			{
 				"cell_type": "code",
@@ -92,7 +92,7 @@
 					"NrOfAccounts =  100 # Set number of accounts\n",
 					""
 				],
-				"execution_count": 24
+				"execution_count": 29
 			},
 			{
 				"cell_type": "code",
@@ -116,7 +116,7 @@
 					"display(dfcustomerids)\n",
 					""
 				],
-				"execution_count": 17
+				"execution_count": 30
 			},
 			{
 				"cell_type": "code",
@@ -140,7 +140,7 @@
 					"display(dfaccountids)\n",
 					""
 				],
-				"execution_count": 18
+				"execution_count": 31
 			},
 			{
 				"cell_type": "code",
@@ -169,7 +169,7 @@
 					"    .setOutputCol(\"response\")\n",
 					")"
 				],
-				"execution_count": 25
+				"execution_count": 32
 			},
 			{
 				"cell_type": "code",
@@ -200,7 +200,7 @@
 					"display(df_accountobject)\n",
 					""
 				],
-				"execution_count": 27
+				"execution_count": 33
 			},
 			{
 				"cell_type": "code",
@@ -223,13 +223,15 @@
 					"schemaCustomer = StructType([ \\\n",
 					"        StructField(\"firstname\", StringType(), False), \\\n",
 					"        StructField(\"lastname\", StringType(), False), \\\n",
-					"        StructField(\"username\", StringType(), False), \\\n",
-					"        StructField(\"email\", StringType(), False) \\\n",
+					"        StructField(\"accountid\", StringType(), False), \\\n",
+					"        StructField(\"city\", StringType(), False), \\\n",
+					"        StructField(\"state\", StringType(), False), \\\n",
+					"        StructField(\"zipcode\", StringType(), False) \\\n",
 					"        ])\n",
 					"\n",
-					"schemaRestaurant = StructType([ \\\n",
-					"        StructField(\"restaurant\", StringType(), False), \\\n",
-					"        StructField(\"description\", StringType(), False) \\\n",
+					"schemaAccount = StructType([ \\\n",
+					"        StructField(\"accountid\", StringType(), False), \\\n",
+					"        StructField(\"balance\", DoubleType(), False) \\\n",
 					"        ])\n",
 					"\n",
 					"\n",
@@ -237,18 +239,18 @@
 					"df_customer = df_customerobject.withColumn(\"json\",from_json(col(\"customerobject\"), schemaCustomer))\\\n",
 					"    .select(col(\"customerID\"), col(\"json.*\"))\n",
 					"\n",
-					"df_restaurant = df_restaurantobject.withColumn(\"json\",from_json(col(\"restaurantobject\"), schemaRestaurant))\\\n",
-					"    .select(col(\"restaurantID\"), col(\"json.*\"))\n",
+					"df_account = df_accountobject.withColumn(\"json\",from_json(col(\"accountobject\"), schemaAccount))\\\n",
+					"    .select(col(\"accountid\"), col(\"json.*\"))\n",
 					"\n",
 					"\n",
 					"\n",
 					"\n",
 					"display(df_customer)\n",
-					"display(df_restaurant)\n",
+					"display(df_accountobject)\n",
 					"\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 36
 			},
 			{
 				"cell_type": "code",

@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "451a1138-b49a-4fdf-809c-f0030892caeb"
+				"spark.autotune.trackingId": "e0288e17-fab3-4842-b7e8-ef06e3e3a006"
 			}
 		},
 		"metadata": {
@@ -97,6 +97,7 @@
 					"    return \"Create a json containing a bank transaction for accountid \"+ accountid + \" Use the following json structure: \\\n",
 					"{ \\\n",
 					"    \\\"transaction date\\\": \\\"yyyy-mm-dd\\\", \\\n",
+					"    \\\"accountid\\\": \\\"\\\", \\\n",
 					"    \\\"amount\\\": \\\"\\\" \\\n",
 					"} \"\n",
 					"\n",
