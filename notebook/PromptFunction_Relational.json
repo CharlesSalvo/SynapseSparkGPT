@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "534b34be-22b3-4b3a-81f0-6589b57ea465"
+				"spark.autotune.trackingId": "451a1138-b49a-4fdf-809c-f0030892caeb"
 			}
 		},
 		"metadata": {
@@ -74,7 +74,7 @@
 					"\n",
 					"@udf(returnType=StringType())\n",
 					"def customer_prompt_udf():\n",
-					"    return \"Generate a json containing banking customer information. Use the following json structure: \\\n",
+					"    return \"Generate a json containing banking customer information. The accountid field needs to be unique. Use the following json structure: \\\n",
 					"{ \\\n",
 					"        \\\"firstname\\\": \\\"\\\", \\\n",
 					"        \\\"lastname\\\": \\\"\\\", \\\n",
