@@ -131,7 +131,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "a3a2e28d-9922-4b80-9da1-f3288304a7dc"
+						"spark.autotune.trackingId": "6fd8b876-6adc-456a-9952-b317ae5eb4b5"
 					}
 				},
 				"metadata": {
@@ -179,7 +179,7 @@
 							"%run PromptFunction_Relational"
 						],
 						"outputs": [],
-						"execution_count": 14
+						"execution_count": 2
 					},
 					{
 						"cell_type": "code",
@@ -233,7 +233,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 10
+						"execution_count": 4
 					},
 					{
 						"cell_type": "code",
@@ -258,7 +258,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 11
+						"execution_count": 5
 					},
 					{
 						"cell_type": "code",
@@ -288,7 +288,7 @@
 							")"
 						],
 						"outputs": [],
-						"execution_count": 7
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -320,7 +320,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 8
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -371,7 +371,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 36
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -440,7 +440,7 @@
 						"spark.dynamicAllocation.enabled": "false",
 						"spark.dynamicAllocation.minExecutors": "2",
 						"spark.dynamicAllocation.maxExecutors": "2",
-						"spark.autotune.trackingId": "f733d787-a3c4-47c4-8d79-cc6d4a3422b7"
+						"spark.autotune.trackingId": "9fb09333-ade0-4db5-8dc2-608fd1873dc8"
 					}
 				},
 				"metadata": {
@@ -465,7 +465,8 @@
 						"sparkVersion": "3.2",
 						"nodeCount": 10,
 						"cores": 8,
-						"memory": 56
+						"memory": 56,
+						"automaticScaleJobs": false
 					},
 					"sessionKeepAliveTimeout": 30
 				},
@@ -487,10 +488,11 @@
 							"print(\"Create UDFs 'tbl_prompt()) -> str'\")"
 						],
 						"outputs": [],
-						"execution_count": 15
+						"execution_count": 2
 					},
 					{
 						"cell_type": "code",
+						"metadata": {},
 						"source": [
 							"from pyspark.sql.functions import udf\n",
 							"from pyspark.sql.types import StringType, IntegerType\n",
@@ -508,10 +510,10 @@
 							"}\"\n",
 							"\n",
 							"@udf(returnType=StringType())\n",
-							"def account_prompt_udf(accountid: str):\n",
+							"def account_prompt_udf():\n",
 							"    return \"Generate a json containing banking account infromation. Use the following json structure:: \\\n",
 							"{ \\\n",
-							"        \\\"accountid\\\": \\\" + accountid + \\\", \\\n",
+							"        \\\"accountid\\\": \\\"\\\", \\\n",
 							"        \\\"balance\\\": \\\"\\\" \\\n",
 							"}\"\n",
 							"\n",
@@ -529,7 +531,7 @@
 							""
 						],
 						"outputs": [],
-						"execution_count": 16
+						"execution_count": null
 					},
 					{
 						"cell_type": "code",
@@ -548,7 +550,7 @@
 							"print(\"UDFs created\")"
 						],
 						"outputs": [],
-						"execution_count": 17
+						"execution_count": null
 					}
 				]
 			},
