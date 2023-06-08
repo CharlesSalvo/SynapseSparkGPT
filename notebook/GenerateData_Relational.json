@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "ae5d4cdb-865a-4149-a76a-d21c5aa8003b"
+				"spark.autotune.trackingId": "915daef5-fec9-4f28-869c-abc127481743"
 			}
 		},
 		"metadata": {
@@ -64,7 +64,7 @@
 				"source": [
 					"%run PromptFunction_Relational"
 				],
-				"execution_count": 2
+				"execution_count": 1
 			},
 			{
 				"cell_type": "code",
@@ -92,7 +92,7 @@
 					"NrOfAccounts =  10 # Set number of accounts\n",
 					""
 				],
-				"execution_count": 3
+				"execution_count": 2
 			},
 			{
 				"cell_type": "code",
@@ -116,7 +116,7 @@
 					"display(dfcustomerids)\n",
 					""
 				],
-				"execution_count": 4
+				"execution_count": 3
 			},
 			{
 				"cell_type": "code",
@@ -140,7 +140,7 @@
 					"display(dfaccountids)\n",
 					""
 				],
-				"execution_count": 5
+				"execution_count": 4
 			},
 			{
 				"cell_type": "code",
@@ -169,7 +169,7 @@
 					"    .setOutputCol(\"response\")\n",
 					")"
 				],
-				"execution_count": null
+				"execution_count": 5
 			},
 			{
 				"cell_type": "code",
@@ -200,7 +200,7 @@
 					"display(df_accountobject)\n",
 					""
 				],
-				"execution_count": null
+				"execution_count": 6
 			},
 			{
 				"cell_type": "code",
@@ -250,48 +250,7 @@
 					"\n",
 					""
 				],
-				"execution_count": null
-			},
-			{
-				"cell_type": "code",
-				"metadata": {
-					"jupyter": {
-						"outputs_hidden": false,
-						"source_hidden": false
-					},
-					"nteract": {
-						"transient": {
-							"deleting": false
-						}
-					},
-					"collapsed": false
-				},
-				"source": [
-					"from pyspark.sql.functions import col, row_number, window, rand\n",
-					"from pyspark.sql.types import StructType, StructField, StringType, IntegerType\n",
-					"\n",
-					"\n",
-					"cross_joined_df = df_customer.crossJoin(df_restaurant) \\\n",
-					"    .withColumn(\"prompt\", reviews_prompt_udf(col(\"restaurant\"), ((5 * rand()).cast(\"int\") + 1))) \\\n",
-					"\n",
-					"df_reviewobject = OpenAICompletion.transform(cross_joined_df) \\\n",
-					"    .withColumn(\"reviewObject\",col('response.choices.text').getItem(0))\\\n",
-					"    .select(col(\"customerid\"),col(\"restaurantid\"), col(\"reviewobject\")) \n",
-					"\n",
-					"\n",
-					"schemaReview = StructType([ \\\n",
-					"        StructField(\"reviewdate\", StringType(), False), \\\n",
-					"        StructField(\"review\", StringType(), False), \\\n",
-					"        StructField(\"rating\", IntegerType(), False) \\\n",
-					"        ])\n",
-					"\n",
-					"\n",
-					"df_review = df_reviewobject.withColumn(\"json\",from_json(col(\"reviewobject\"), schemaReview))\\\n",
-					"    .select(col(\"restaurantid\"), col(\"customerid\"), col(\"json.*\"))\n",
-					"\n",
-					"display(df_review)"
-				],
-				"execution_count": null
+				"execution_count": 7
 			}
 		]
 	}
